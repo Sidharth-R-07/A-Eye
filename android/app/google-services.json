@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "378624723950",
+    "project_id": "a-eye-17eb4",
+    "storage_bucket": "a-eye-17eb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378624723950:android:380c6caeaae3fbd1171cff",
+        "android_client_info": {
+          "package_name": "com.example.open_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378624723950-n7t2be80sstm4osv0jhsasrvcfkru0bv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.open_ai",
+            "certificate_hash": "e8decfe28f86faa0aba95c281319efd8447ae452"
+          }
+        },
+        {
+          "client_id": "378624723950-hggtudc8ui2eac66id74gd2ravr30ret.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnDuXqRRA_XlzBYFKD2Dlzd0qVpZM4FU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378624723950-hggtudc8ui2eac66id74gd2ravr30ret.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
