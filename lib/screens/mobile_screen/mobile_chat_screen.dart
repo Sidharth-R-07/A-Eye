@@ -58,7 +58,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
     setState(() {
       voiceText = result.recognizedWords;
     });
-
+    inputController.text = voiceText;
     log('PRINTING VOICE:$voiceText');
   }
 
@@ -148,9 +148,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
                           controller: inputController,
                           focusNode: _focusNode,
                           onChanged: (value) {
-                            setState(() {
-                              inputText = value;
-                            });
+                            inputText = voiceText;
                           },
                           onFieldSubmitted: (_) => _sendMessage(
                               chatProvider: chatProvider,
@@ -442,7 +440,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
     });
 
     await chatProvider.sendMessageToApi(
-        msg: msg, chatModeld: modelsProvider.getCurrentModel);
+        msg: msg, chatModeld: modelsProvider.getCurrentModel, context: context);
 
     _focusNode.unfocus();
     inputController.clear();
@@ -459,7 +457,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
             chatIndex: 0,
             createAt: DateTime.now().toIso8601String()));
       } catch (err) {
-        print('ERROR----------$err');
+        MessageCard(message: err.toString(), isBot: true);
       }
     }
 

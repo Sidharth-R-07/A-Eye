@@ -17,15 +17,13 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendMessageToApi({
-    required String msg,
-    required String chatModeld,
-  }) async {
+  Future<void> sendMessageToApi(
+      {required String msg,
+      required String chatModeld,
+      required BuildContext context}) async {
     chatList.addAll(
       await ApiServices.sendMessage(
-        message: msg,
-        modelId: chatModeld,
-      ),
+          message: msg, modelId: chatModeld, ctx: context),
     );
     notifyListeners();
   }

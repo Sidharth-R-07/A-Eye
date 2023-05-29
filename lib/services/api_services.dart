@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_ai/constant/colors.dart';
 import 'package:open_ai/constant/urls.dart';
 import 'package:open_ai/models/message_model.dart';
+import 'package:open_ai/widgets/message_card.dart';
 
 import '../models/models_model.dart';
 
@@ -35,8 +38,10 @@ class ApiServices {
   static Future<List<MessageModel>> sendMessage({
     required String message,
     required String modelId,
+    required BuildContext ctx,
   }) async {
     List<MessageModel> msgList = [];
+    String errorText = 'Something went wrong!try again...';
     try {
       const apiUrl = '$baseUrl/chat/completions';
 
@@ -73,7 +78,12 @@ class ApiServices {
         log('Failed to post message. Status code: ${response.statusCode}');
       }
     } catch (err) {
-      log('ERROR FOUND IN SEND MESSAGE :$err');
+      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            errorText,
+            style: const TextStyle(color: whiteColor),
+          )));
     }
 
     return msgList;

@@ -37,11 +37,18 @@ class _MessageCardState extends State<MessageCard> {
     }
   }
 
+  void stopSpeaking() async {
+    await ftts.stop();
+    setState(() {
+      isPlaying = false;
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
 
-    ftts.cancelHandler;
+    ftts.stop();
   }
 
   @override
@@ -102,7 +109,11 @@ class _MessageCardState extends State<MessageCard> {
                         top: 0,
                         child: IconButton(
                           onPressed: () {
-                            textToSpeak(widget.message);
+                            if (!isPlaying) {
+                              textToSpeak(widget.message);
+                            } else {
+                              stopSpeaking();
+                            }
                           },
                           icon: isPlaying
                               ? const Icon(Icons.volume_up_outlined)
@@ -117,59 +128,5 @@ class _MessageCardState extends State<MessageCard> {
         ],
       ),
     );
-
-    /*  
-    return Column(
-      children: [
-        Container(
-          color: isBot ? bgSecondary : bgPrimary,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  isBot ? aiImage : personImage,
-                  height: 25,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: AnimatedTextKit(
-                        isRepeatingAnimation: false,
-                        displayFullTextOnTap: true,
-                        repeatForever: false,
-                        totalRepeatCount: 1,
-                        animatedTexts: [
-                      TyperAnimatedText(
-                        message,
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(
-                                color: whiteColor, fontWeight: FontWeight.bold),
-                      ),
-                    ])),
-                isBot
-                    ? Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.volume_off_rounded,
-                              color: bgIconColor,
-                            )),
-                      )
-                    : const SizedBox.shrink()
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-
-    */
   }
 }
