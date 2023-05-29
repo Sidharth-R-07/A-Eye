@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:open_ai/constant/colors.dart';
 
 class MessageCard extends StatefulWidget {
@@ -13,6 +14,35 @@ class MessageCard extends StatefulWidget {
 
 class _MessageCardState extends State<MessageCard> {
   bool isPlaying = false;
+  FlutterTts ftts = FlutterTts();
+
+  void textToSpeak(String text) async {
+    await ftts.setLanguage("en-US");
+    await ftts.setSpeechRate(0.5); //speed of speech
+    await ftts.setVolume(1.0); //volume of speech
+    await ftts.setPitch(1); //pitc of sound
+
+    //play text to sp
+    var result = await ftts.speak(text);
+    if (result == 1) {
+      setState(() {
+        isPlaying = true;
+      });
+      //speaking
+    } else {
+      setState(() {
+        isPlaying = false;
+      });
+      //not speaking
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    ftts.cancelHandler;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +102,7 @@ class _MessageCardState extends State<MessageCard> {
                         top: 0,
                         child: IconButton(
                           onPressed: () {
-                            isPlaying = !isPlaying;
+                            textToSpeak(widget.message);
                           },
                           icon: isPlaying
                               ? const Icon(Icons.volume_up_outlined)
