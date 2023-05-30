@@ -205,193 +205,220 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
         ));
   }
 
-  Container openDrawer({
+  Widget openDrawer({
     required DbProvider dbProvider,
     required ChatProvider chatProvider,
     required ModelsProvider modelProvider,
     required AuthProvider authProvider,
     required Size size,
   }) {
-    bool _loading = false;
+    bool loading = false;
     final currentUser = authProvider.getCurrentUser;
 
-    return Container(
-      width: size.width * 0.70,
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: linearContainerBg,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          DrawerHeader(
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BounceInDown(
-                        child: CircleAvatar(
-                          radius: 40,
-                          backgroundColor: bgSecondary,
-                          backgroundImage: NetworkImage(currentUser!.photoURL!),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: FadeInLeft(
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.close,
-                              color: bgIconColor,
-                              size: 35,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+    return Drawer(
+      elevation: 10,
+      surfaceTintColor: Colors.transparent,
+      clipBehavior: Clip.antiAlias,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25),
+          bottomRight: Radius.circular(25),
+        ),
+      ),
+      child: Container(
+        width: size.width * 0.70,
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                colors: linearContainerBg,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            DrawerHeader(
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BounceInDown(
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: bgSecondary,
+                            backgroundImage:
+                                NetworkImage(currentUser!.photoURL!),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  FadeInLeft(
-                    child: Text(
-                      currentUser.displayName!.toUpperCase(),
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: whiteColor,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: FadeInLeft(
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                color: bgIconColor,
+                                size: 35,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  FadeInLeft(
-                    child: FittedBox(
+                    FadeInLeft(
                       child: Text(
-                        currentUser.email!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: whiteColor),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-              child: dbProvider.historyList.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'There is no history yet!',
-                        style: TextStyle(
+                        currentUser.displayName!.toUpperCase(),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: whiteColor,
-                            fontSize: 18,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold),
                       ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.zero,
-                      addSemanticIndexes: true,
-                      itemCount: dbProvider.historyList.length,
-                      // reverse: true,
-                      // shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final history = dbProvider.historyList[index];
-                        return FadeInLeft(
-                          delay: Duration(milliseconds: 600 * index),
-                          child: ListTile(
-                            title: Text(
-                              history.message,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: const TextStyle(
-                                  color: whiteColor,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            trailing: IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_right_outlined,
-                                  color: whiteColor,
-                                ),
-                                onPressed: () {
-                                  _sendMessage(
-                                      modelsProvider: modelProvider,
-                                      chatProvider: chatProvider,
-                                      dbProvider: dbProvider,
-                                      fromHistory: true,
-                                      historyMsg: history.message);
-
-                                  Navigator.of(context).pop();
-                                }),
-                          ),
-                        );
-                      },
-                    )),
-          // const Spacer(),
-          // if (dbProvider.historyList.isNotEmpty)
-
-          dbProvider.historyList.isNotEmpty
-              ? MyOutlineButton(
-                  onTap: () {
-                    dbProvider.clearAllHistory();
-                  },
-                  title: 'clear history')
-              : const SizedBox.shrink(),
-          ListTile(
-            onTap: () async {
-              setState(() {
-                _loading = true;
-              });
-              try {
-                await authProvider
-                    .signOutUser()
-                    .then((value) => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MobileWelcomeScreen(),
+                    ),
+                    FadeInLeft(
+                      child: FittedBox(
+                        child: Text(
+                          currentUser.email!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(color: whiteColor),
                         ),
-                        (route) => false));
-              } catch (err) {
-                FToast().showToast(
-                    child: Text(err.toString()), gravity: ToastGravity.BOTTOM);
-              } finally {
-                setState(() {
-                  _loading = false;
-                });
-              }
-            },
-            title: const Text(
-              'Sign Out',
-              style: TextStyle(color: whiteColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            trailing: _loading == true
-                ? const Loader()
-                : const Icon(
-                    Icons.logout_outlined,
-                    color: bgIconColor,
-                  ),
-          )
-        ],
+            Expanded(
+                child: dbProvider.historyList.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'There is no history yet!',
+                          style: TextStyle(
+                              color: whiteColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        addSemanticIndexes: true,
+                        itemCount: dbProvider.historyList.length,
+                        // reverse: true,
+                        // shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final history = dbProvider.historyList[index];
+                          return FadeInLeft(
+                            delay: Duration(milliseconds: 450 * index),
+                            child: ListTile(
+                              title: Text(
+                                history.message,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: const TextStyle(
+                                    color: whiteColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              trailing: IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_right_outlined,
+                                    color: whiteColor,
+                                  ),
+                                  onPressed: () {
+                                    _sendMessage(
+                                        modelsProvider: modelProvider,
+                                        chatProvider: chatProvider,
+                                        dbProvider: dbProvider,
+                                        fromHistory: true,
+                                        historyMsg: history.message);
+
+                                    Navigator.of(context).pop();
+                                  }),
+                            ),
+                          );
+                        },
+                      )),
+            // const Spacer(),
+            // if (dbProvider.historyList.isNotEmpty)
+
+            dbProvider.historyList.isNotEmpty
+                ? MyOutlineButton(
+                    onTap: () {
+                      dbProvider.clearAllHistory();
+                    },
+                    title: 'clear history')
+                : const SizedBox.shrink(),
+            ListTile(
+              onTap: () async {
+                setState(() {
+                  loading = true;
+                });
+                await _signOutUser(authProvider);
+
+                setState(() {
+                  loading = false;
+                });
+              },
+              title: const Text(
+                'Sign Out',
+                style: TextStyle(color: whiteColor),
+              ),
+              trailing: loading == true
+                  ? const Loader()
+                  : const Icon(
+                      Icons.logout_outlined,
+                      color: bgIconColor,
+                    ),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _signOutUser(AuthProvider authProvider) async {
+    try {
+      await authProvider
+          .signOutUser()
+          .then((value) => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MobileWelcomeScreen(),
+              ),
+              (route) => false));
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            err.toString(),
+            style: const TextStyle(color: whiteColor),
+          )));
+    }
   }
 
   AppBar MobilechatScreenAppBar(BuildContext context) {
     return AppBar(
       titleSpacing: 0,
       centerTitle: false,
+      iconTheme: const IconThemeData(color: bgIconColor),
       title: Row(
         children: [
-          SvgPicture.asset(
-            aiSvgImage,
-            height: 45,
-            placeholderBuilder: (context) => const Loader(color: whiteColor),
+          ElasticIn(
+            child: Hero(
+              tag: aiSvgImage,
+              child: SvgPicture.asset(
+                aiSvgImage,
+                height: 45,
+                placeholderBuilder: (context) =>
+                    const Loader(color: whiteColor),
+              ),
+            ),
           ),
           const SizedBox(
             width: 6,

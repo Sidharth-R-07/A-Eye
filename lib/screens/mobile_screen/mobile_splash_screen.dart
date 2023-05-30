@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_ai/constant/asset_images.dart';
 import 'package:open_ai/constant/colors.dart';
 import 'package:open_ai/providers/db_provider.dart';
 import 'package:open_ai/screens/mobile_screen/mobile_chat_screen.dart';
@@ -62,12 +63,16 @@ class SplashWidget extends StatelessWidget {
         children: [
           SizedBox(
             height: size.height * 0.50,
-            child: SvgPicture.asset(
-              'assets/images/svg/ai-bot.svg',
-              placeholderBuilder: (context) => const CircularProgressIndicator(
-                color: whiteColor,
+            child: Hero(
+              tag: aiSvgImage,
+              child: SvgPicture.asset(
+                'assets/images/svg/ai-bot.svg',
+                placeholderBuilder: (context) =>
+                    const CircularProgressIndicator(
+                  color: whiteColor,
+                ),
+                fit: BoxFit.contain,
               ),
-              fit: BoxFit.contain,
             ),
           ),
           const Loader(

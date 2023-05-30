@@ -112,8 +112,8 @@ class _MobileWelcomeScreenState extends State<MobileWelcomeScreen>
           ),
         ),
         if (showStartButton) ...[
-          const SizedBox(
-            height: 12,
+          SizedBox(
+            height: size.height * 0.03,
           ),
           FadeInUp(
             child: KAuthButton(

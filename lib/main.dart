@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(backgroundColor: bgPrimary),
           scaffoldBackgroundColor: bgSecondary,
           iconTheme: const IconThemeData(color: bgIconColor),
+        
           fontFamily: 'Cera-pro',
           useMaterial3: true,
         ),

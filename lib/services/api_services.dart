@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:open_ai/constant/colors.dart';
 import 'package:open_ai/constant/urls.dart';
 import 'package:open_ai/models/message_model.dart';
-import 'package:open_ai/widgets/message_card.dart';
 
 import '../models/models_model.dart';
 
